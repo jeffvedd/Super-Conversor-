@@ -11,7 +11,8 @@
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
-    },
+    "projectId": "4d415a8e"
+     },
     "ios": {
       "supportsTablet": true
     },
