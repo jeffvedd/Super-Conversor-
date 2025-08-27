@@ -1,21 +1,23 @@
-
-  "name": "Super Conversor",
-  "slug": "super-conversor-",
-  "version": "1.0.0",
-  "platforms": [
-    "ios",
-    "android"
-  ],
-  "ios": {
-    "bundleIdentifier": "com.superconversor.app"
-  },
-  "android": {
-    "package": "com.superconversor.app"
-  },
-  "sdkVersion": "53.0.0",
-  "extra": {
-    "eas": {
-      "projectId": "5975a084-6f00-4ffc-ba48-d02c6b83f482"
+{
+  "expo": {
+    "name": "Super Conversor",
+    "slug": "super-conversor",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.superconversor.app"
+    },
+    "android": {
+      "package": "com.superconversor.app"
+    },
+    "sdkVersion": "53.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "5975a084-6f00-4ffc-ba48-d02c6b83f482"
+      }
     }
   }
 }
