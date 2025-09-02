@@ -13,7 +13,7 @@
     "android": {
       "package": "com.superconversor.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/superconversor.png",
+        "foregroundImage": "./superconversor.png",
         "backgroundColor": "#FFFFFF"
       }
     },
@@ -23,6 +23,6 @@
         "projectId": "5975a084-6f00-4ffc-ba48-d02c6b83f482"
       }
     },
-    "icon": "./assets/superconversor.png"
+    "icon": "./superconversor.png"
   }
 }
