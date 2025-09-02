@@ -23,6 +23,11 @@
         "projectId": "5975a084-6f00-4ffc-ba48-d02c6b83f482"
       }
     },
-    "icon": "./superconversor.png"
+    "icon": "./superconversor.png",
+    "splash": {
+      "image": "./superconversor.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    }
   }
 }
