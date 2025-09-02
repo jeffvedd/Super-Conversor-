@@ -11,13 +11,18 @@
       "bundleIdentifier": "com.superconversor.app"
     },
     "android": {
-      "package": "com.superconversor.app"
+      "package": "com.superconversor.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/superconversor.png",
+        "backgroundColor": "#FFFFFF"
+      }
     },
     "sdkVersion": "53.0.0",
     "extra": {
       "eas": {
         "projectId": "5975a084-6f00-4ffc-ba48-d02c6b83f482"
       }
-    }
+    },
+    "icon": "./assets/superconversor.png"
   }
 }
