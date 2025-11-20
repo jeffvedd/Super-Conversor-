@@ -8,8 +8,8 @@
 "web": "expo start --web"
 },
 "dependencies": {
-"expo": "~53.0.22",
-"expo-status-bar": "~2.2.3",
+"expo": "~53.0.22",": "~2.2.3",
+"expo-clipboard": "~6.0.3"
 "react": "19.0.0",
 "react-native": "0.79.6",
 "react-native-paper": "4.9.2",
