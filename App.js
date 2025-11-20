@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Modal, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Modal, FlatList, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Clipboard from "expo-clipboard";
 
 const App = () => {
   const [inputValue, setInputValue] = useState('');
@@ -50,7 +51,6 @@ const App = () => {
     }
   };
 
-  // Atualizar unidades quando a categoria mudar
   useEffect(() => {
     const units = Object.keys(categories[activeCategory].units);
     setFromUnit(units[0]);
@@ -70,7 +70,6 @@ const App = () => {
 
     let convertedValue;
 
-    // Conversões de peso
     if (activeCategory === 'weight') {
       const weightInKg = {
         'kg': value,
@@ -87,7 +86,6 @@ const App = () => {
       }[toUnit];
     }
 
-    // Conversões de comprimento
     else if (activeCategory === 'length') {
       const lengthInMeters = {
         'm': value,
@@ -106,7 +104,6 @@ const App = () => {
       }[toUnit];
     }
 
-    // Conversões de volume
     else if (activeCategory === 'volume') {
       const volumeInLiters = {
         'l': value,
@@ -123,7 +120,6 @@ const App = () => {
       }[toUnit];
     }
 
-    // Conversões de temperatura
     else if (activeCategory === 'temperature') {
       let tempInCelsius;
       if (fromUnit === 'c') tempInCelsius = value;
@@ -148,20 +144,10 @@ const App = () => {
     }
   };
 
-  const selectFromUnit = (unit) => {
-    setFromUnit(unit);
-    setShowFromUnitModal(false);
-    setResult('');
-  };
-
-  const selectToUnit = (unit) => {
-    setToUnit(unit);
-    setShowToUnitModal(false);
-    setResult('');
-  };
-
-  const changeCategory = (category) => {
-    setActiveCategory(category);
+  const copiarPix = async () => {
+    const chavePix = "03927223999";
+    await Clipboard.setStringAsync(chavePix);
+    Alert.alert("Chave Pix copiada!", "Obrigado por contribuir ❤️");
   };
 
   const UnitModal = ({ visible, onClose, onSelect, units, title }) => (
@@ -183,10 +169,7 @@ const App = () => {
             data={Object.entries(units)}
             keyExtractor={([key]) => key}
             renderItem={({ item: [key, name] }) => (
-              <TouchableOpacity
-                style={styles.modalItem}
-                onPress={() => onSelect(key)}
-              >
+              <TouchableOpacity style={styles.modalItem} onPress={() => onSelect(key)}>
                 <Text style={styles.modalItemText}>{name}</Text>
               </TouchableOpacity>
             )}
@@ -199,98 +182,100 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#6C63FF" />
-      
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Conversor Universal</Text>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
         
-        {/* Categorias clicáveis diretamente no header */}
-        <View style={styles.categoryHeaderRow}>
-          {Object.entries(categories).map(([key, category]) => (
-            <TouchableOpacity
-              key={key}
-              onPress={() => changeCategory(key)}
-            >
-              <Text style={[
-                styles.categoryHeaderText,
-                activeCategory === key && styles.activeCategoryHeaderText
-              ]}>
-                {category.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
+        {/* HEADER */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Conversor Universal</Text>
 
-      {/* Converter Card */}
-      <View style={styles.card}>
-        <View style={styles.inputSection}>
-          <Text style={styles.sectionTitle}>Converter de</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              value={inputValue}
-              onChangeText={setInputValue}
-              placeholder="Digite o valor"
-              keyboardType="numeric"
-              placeholderTextColor="#999"
-            />
-            <TouchableOpacity 
-              style={styles.unitSelector}
-              onPress={() => setShowFromUnitModal(true)}
-            >
-              <Text style={styles.unitText}>
-                {categories[activeCategory].units[fromUnit]}
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.categoryHeaderRow}>
+            {Object.entries(categories).map(([key, category]) => (
+              <TouchableOpacity key={key} onPress={() => setActiveCategory(key)}>
+                <Text style={[
+                  styles.categoryHeaderText,
+                  activeCategory === key && styles.activeCategoryHeaderText
+                ]}>
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
 
-        {/* Swap Button */}
-        <TouchableOpacity style={styles.swapButton} onPress={swapUnits}>
-          <Ionicons name="swap-vertical" size={24} color="#6C63FF" />
-        </TouchableOpacity>
+        {/* CARD */}
+        <View style={styles.card}>
+          <View style={styles.inputSection}>
+            <Text style={styles.sectionTitle}>Converter de</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                value={inputValue}
+                onChangeText={setInputValue}
+                placeholder="Digite o valor"
+                keyboardType="numeric"
+                placeholderTextColor="#999"
+              />
+              <TouchableOpacity 
+                style={styles.unitSelector}
+                onPress={() => setShowFromUnitModal(true)}
+              >
+                <Text style={styles.unitText}>
+                  {categories[activeCategory].units[fromUnit]}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
-        <View style={styles.outputSection}>
-          <Text style={styles.sectionTitle}>Para</Text>
-          <View style={styles.outputContainer}>
-            <Text style={styles.outputText}>
-              {result || '0.0000'}
+          <TouchableOpacity style={styles.swapButton} onPress={swapUnits}>
+            <Ionicons name="swap-vertical" size={24} color="#6C63FF" />
+          </TouchableOpacity>
+
+          <View style={styles.outputSection}>
+            <Text style={styles.sectionTitle}>Para</Text>
+            <View style={styles.outputContainer}>
+              <Text style={styles.outputText}>{result || '0.0000'}</Text>
+              <TouchableOpacity 
+                style={styles.unitSelector}
+                onPress={() => setShowToUnitModal(true)}
+              >
+                <Text style={styles.unitText}>
+                  {categories[activeCategory].units[toUnit]}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <TouchableOpacity style={styles.convertButton} onPress={convert}>
+            <Text style={styles.convertButtonText}>Converter</Text>
+            <Ionicons name="arrow-forward" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
+
+        {/* RECENTES */}
+        <View style={styles.recentContainer}>
+          <Text style={styles.recentTitle}>Conversões Recentes</Text>
+          <View style={styles.recentItem}>
+            <Text style={styles.recentText}>
+              {inputValue || '0'} {categories[activeCategory].units[fromUnit]} = {result || '0.0000'} {categories[activeCategory].units[toUnit]}
             </Text>
-            <TouchableOpacity 
-              style={styles.unitSelector}
-              onPress={() => setShowToUnitModal(true)}
-            >
-              <Text style={styles.unitText}>
-                {categories[activeCategory].units[toUnit]}
-              </Text>
-            </TouchableOpacity>
+            <Text style={styles.recentTime}>Agora mesmo</Text>
           </View>
         </View>
 
-        {/* Convert Button */}
-        <TouchableOpacity style={styles.convertButton} onPress={convert}>
-          <Text style={styles.convertButtonText}>Converter</Text>
-          <Ionicons name="arrow-forward" size={20} color="white" />
+        {/* BOTÃO PIX */}
+        <TouchableOpacity style={styles.pixButton} onPress={copiarPix}>
+          <Ionicons name="heart" size={22} color="white" style={{ marginRight: 10 }} />
+          <Text style={styles.pixButtonText}>Contribuir para novos projetos</Text>
         </TouchableOpacity>
-      </View>
 
-      {/* Recent Conversions */}
-      <View style={styles.recentContainer}>
-        <Text style={styles.recentTitle}>Conversões Recentes</Text>
-        <View style={styles.recentItem}>
-          <Text style={styles.recentText}>
-            {inputValue || '0'} {categories[activeCategory].units[fromUnit]} = {result || '0.0000'} {categories[activeCategory].units[toUnit]}
-          </Text>
-          <Text style={styles.recentTime}>Agora mesmo</Text>
-        </View>
-      </View>
+      </ScrollView>
 
-      {/* Modals */}
+      {/* MODAIS */}
       <UnitModal
         visible={showFromUnitModal}
         onClose={() => setShowFromUnitModal(false)}
-        onSelect={selectFromUnit}
+        onSelect={(u) => { setFromUnit(u); setShowFromUnitModal(false); }}
         units={categories[activeCategory].units}
         title="Unidade de Origem"
       />
@@ -298,19 +283,18 @@ const App = () => {
       <UnitModal
         visible={showToUnitModal}
         onClose={() => setShowToUnitModal(false)}
-        onSelect={selectToUnit}
+        onSelect={(u) => { setToUnit(u); setShowToUnitModal(false); }}
         units={categories[activeCategory].units}
         title="Unidade de Destino"
       />
+
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f7fa',
-  },
+  container: { flex: 1, backgroundColor: '#f5f7fa' },
+
   header: {
     backgroundColor: '#6C63FF',
     padding: 20,
@@ -327,7 +311,6 @@ const styles = StyleSheet.create({
   categoryHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
     gap: 15,
     marginTop: 8,
   },
@@ -348,24 +331,11 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 20,
     padding: 25,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
     elevation: 8,
   },
-  sectionTitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 10,
-    fontWeight: '600',
-  },
-  inputSection: {
-    marginBottom: 20,
-  },
+
+  inputSection: { marginBottom: 20 },
+  sectionTitle: { fontSize: 16, color: '#666', fontWeight: '600' },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -374,25 +344,16 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: 15,
     paddingVertical: 5,
+    marginTop: 10,
   },
-  input: {
-    flex: 1,
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    padding: 10,
-  },
+  input: { flex: 1, fontSize: 20, fontWeight: 'bold', color: '#333' },
   unitSelector: {
     backgroundColor: '#f0f0f0',
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 12,
   },
-  unitText: {
-    fontSize: 14,
-    color: '#666',
-    fontWeight: '600',
-  },
+  unitText: { fontSize: 14, color: '#666', fontWeight: '600' },
   swapButton: {
     alignSelf: 'center',
     backgroundColor: '#f0f0f0',
@@ -402,18 +363,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
     elevation: 3,
   },
-  outputSection: {
-    marginBottom: 20,
-  },
+
+  outputSection: { marginBottom: 20 },
   outputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -429,8 +382,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#6C63FF',
-    padding: 10,
   },
+
   convertButton: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -438,14 +391,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#6C63FF',
     padding: 18,
     borderRadius: 15,
-    shadowColor: '#6C63FF',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
     elevation: 8,
+    marginTop: 10,
   },
   convertButtonText: {
     fontSize: 18,
@@ -453,40 +400,37 @@ const styles = StyleSheet.create({
     color: 'white',
     marginRight: 10,
   },
-  recentContainer: {
-    margin: 20,
-    marginTop: 0,
-  },
-  recentTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 15,
-  },
+
+  recentContainer: { margin: 20, marginTop: 0 },
+  recentTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 15, color: '#333' },
   recentItem: {
     backgroundColor: 'white',
     padding: 15,
     borderRadius: 15,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
     elevation: 3,
   },
-  recentText: {
+  recentText: { fontSize: 16, color: '#333', fontWeight: '600' },
+  recentTime: { fontSize: 12, color: '#999', marginTop: 5 },
+
+  // PIX
+  pixButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#6C63FF",
+    marginHorizontal: 20,
+    padding: 15,
+    borderRadius: 15,
+    marginBottom: 30,
+    elevation: 8,
+  },
+  pixButtonText: {
+    color: "white",
     fontSize: 16,
-    color: '#333',
-    fontWeight: '600',
+    fontWeight: "bold",
   },
-  recentTime: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 5,
-  },
+
+  // MODAIS
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -501,29 +445,17 @@ const styles = StyleSheet.create({
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
+  modalTitle: { fontSize: 18, fontWeight: 'bold' },
   modalItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#f5f5f5',
   },
-  modalItemText: {
-    fontSize: 16,
-    color: '#333',
-  },
+  modalItemText: { fontSize: 16 },
 });
 
 export default App;
-
