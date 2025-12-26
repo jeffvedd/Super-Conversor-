@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Super Conversor",
+    "slug": "super-conversor-",
+    "version": "1.0.1",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "com.superconversor.app"
+    },
+    "android": {
+      "package": "com.superconversor.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./superconversor.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "sdkVersion": "53.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "5975a084-6f00-4ffc-ba48-d02c6b83f482"
+      }
+    },
+    "icon": "./superconversor.png",
+    "splash": {
+      "image": "./superconversor.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    },
+    "plugins": [
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-5461017538385057~2790181415",
+          "iosAppId": "ca-app-pub-5461017538385057~2790181415"
+        }
+      ]
+    ]
+  }
+}
